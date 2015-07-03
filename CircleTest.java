@@ -8,11 +8,12 @@ import javax.swing.*;
 public class CircleTest extends JComponent implements Runnable
 {
     //                                    AABB friction, ballCollision Friction, drag Friction,    time factor
-    PhysicsEngine PE = new PhysicsEngine ( 1,            20,                      0 ,               8 );
-    boolean firstFrame = true;
-
+    PhysicsEngine PE = new PhysicsEngine (1, 20, 0, 8);
+    Vector circlesToPrint;
+    Vector circleColors;
     public CircleTest ()
     {
+	addObjects ();
 	Thread t = new Thread (this);
 	t.start ();
     }
@@ -39,65 +40,29 @@ public class CircleTest extends JComponent implements Runnable
     {
 	Graphics2D g2 = (Graphics2D) g;
 	g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	
-	Circle ball1 = PE.getCircle ("ball1"), ball2 = PE.getCircle ("ball2"), ball3 = PE.getCircle ("ball3");
-	Circle ball4 = PE.getCircle ("ball4"), ball5 = PE.getCircle ("ball5"), ball6 = PE.getCircle ("ball6");
-	Circle ball7 = PE.getCircle ("ball7"), ball8 = PE.getCircle ("ball8"), ball9 = PE.getCircle ("ball9");
-	Circle ball10 = PE.getCircle ("ball10"), ball11 = PE.getCircle ("ball11"), ball12 = PE.getCircle ("ball12");
-	
-	Ellipse2D circle1 = new Ellipse2D.Double (ball1.pos.x - ball1.r, ball1.pos.y - ball1.r, ball1.r * 2, ball1.r * 2);
-	Ellipse2D circle2 = new Ellipse2D.Double (ball2.pos.x - ball2.r, ball2.pos.y - ball2.r, ball2.r * 2, ball2.r * 2);
-	Ellipse2D circle3 = new Ellipse2D.Double (ball3.pos.x - ball3.r, ball3.pos.y - ball3.r, ball3.r * 2, ball3.r * 2);
-	Ellipse2D circle4 = new Ellipse2D.Double (ball4.pos.x - ball4.r, ball4.pos.y - ball4.r, ball4.r * 2, ball4.r * 2);
-	Ellipse2D circle5 = new Ellipse2D.Double (ball5.pos.x - ball5.r, ball5.pos.y - ball5.r, ball5.r * 2, ball5.r * 2);
-	Ellipse2D circle6 = new Ellipse2D.Double (ball6.pos.x - ball6.r, ball6.pos.y - ball6.r, ball6.r * 2, ball6.r * 2);
-	Ellipse2D circle7 = new Ellipse2D.Double (ball7.pos.x - ball7.r, ball7.pos.y - ball7.r, ball7.r * 2, ball7.r * 2);
-	Ellipse2D circle8 = new Ellipse2D.Double (ball8.pos.x - ball8.r, ball8.pos.y - ball8.r, ball8.r * 2, ball8.r * 2);
-	Ellipse2D circle9 = new Ellipse2D.Double (ball9.pos.x - ball9.r, ball9.pos.y - ball9.r, ball9.r * 2, ball9.r * 2);
-	Ellipse2D circle10 = new Ellipse2D.Double (ball10.pos.x - ball10.r, ball10.pos.y - ball10.r, ball10.r * 2, ball10.r * 2);
-	Ellipse2D circle11 = new Ellipse2D.Double (ball11.pos.x - ball11.r, ball11.pos.y - ball11.r, ball11.r * 2, ball11.r * 2);
-	Ellipse2D circle12 = new Ellipse2D.Double (ball12.pos.x - ball12.r, ball12.pos.y - ball12.r, ball12.r * 2, ball12.r * 2);
+
 	Rectangle box = new Rectangle (10, 10, 1200, 700);
-	g2.setPaint (Color.green);
+	g2.setPaint (new Color(0,80,0));
 	g2.fill (box);
-	g2.setPaint (Color.red);
-	g2.fill (circle1);
-	g2.setPaint (Color.blue);
-	g2.fill (circle2);
-	g2.setPaint (Color.red);
-	g2.fill (circle3);
-	g2.fill (circle9);
-	g2.setPaint (Color.pink);
-	g2.fill (circle4);
-	g2.fill (circle7);
-	 g2.setPaint (Color.red);
-	g2.fill (circle8);
-	g2.setPaint (Color.black);
-	g2.fill (circle5);     
-	g2.fill (circle12);   
-	g2.fill (circle6);
-	g2.fill (circle11);
-	g2.fill (circle10);
-	
+
+	for (int i = 0 ; i < circlesToPrint.size () ; i++)
+	{
+	    g2.setPaint ((Color) ( circleColors.get(i % circleColors.size() )) );
+	    Circle ball = (Circle) circlesToPrint.get (i);
+	    Ellipse2D circle = new Ellipse2D.Double (ball.pos.x - ball.r, ball.pos.y - ball.r, ball.r * 2, ball.r * 2);
+	    g2.fill (circle);
+	}
     }
 
 
     private void timeStep ()
     {
-	if (firstFrame)
-	{
-	    addObjects ();
-	    firstFrame = false;
-	}
 	PE.Update ();
     }
 
 
     private void addObjects ()
     {
-    
-    
-
 	PE.addCircle ("ball1", 100, 100, 2, 0, 0, 0, 10);
 	PE.addCircle ("ball2", 100, 140, 2, 0, 0, 0, 10);
 	PE.addCircle ("ball3", 100, 180, 2, 0, 0, 0, 10);
@@ -110,8 +75,8 @@ public class CircleTest extends JComponent implements Runnable
 	PE.addCircle ("ball10", 100, 420, 2, 0, 0, 0, 10);
 	PE.addCircle ("ball11", 100, 460, 2, 0, 0, 0, 10);
 	PE.addCircle ("ball12", 100, 500, 2, 0, 0, 0, 10);
-    
-	
+
+
 	// PE.addCircle ("ball1", 920, 140, 0.4, -0.4, 0, 0, 23);
 	// PE.addCircle ("ball2", 270, 160, 0.8, 2.3, 0, 0, 18);
 	// PE.addCircle ("ball3", 750, 130, 0.1, 1.3, 0, 0, 17);
@@ -124,8 +89,8 @@ public class CircleTest extends JComponent implements Runnable
 	// PE.addCircle ("ball10", 320, 440, -0.1, 2.4, 0, 0, 13);
 	// PE.addCircle ("ball11", 470, 360, 0.2, 1.8, 0, 0, 18);
 	// PE.addCircle ("ball12", 550, 530, -3.7, 1.3, 0, 0, 17);
-	
-	
+
+
 
 	// PE.addCircle ("ball1", 220, 140, 0.4, 0, 0, 0.01, 23);
 	// PE.addCircle ("ball2", 270, 160, 0.8, 0, 0, 0.01, 18);
@@ -139,18 +104,33 @@ public class CircleTest extends JComponent implements Runnable
 	// PE.addCircle ("ball10", 320, 440, 0.4, 0, 0, 0.01, 23);
 	// PE.addCircle ("ball11", 470, 360, 0.2, 0, 0, 0.01, 18);
 	// PE.addCircle ("ball12", 550, 530, 0.7, 0, 0, 0.01, 17);
-	// 
+	
+	
 	PE.addAABB ("box", 10, 10, 1200, 700);
+	circlesToPrint = PE.getAllCircles ();
+	
+	circleColors=new Vector();
+	circleColors.add(Color.black);
+	circleColors.add(Color.red);
+	circleColors.add(Color.pink);
+	circleColors.add(Color.blue);
+	circleColors.add(Color.yellow);
+	circleColors.add(Color.orange);
+	circleColors.add(Color.gray);
+	circleColors.add(Color.cyan);
+	circleColors.add(Color.magenta);
+	circleColors.add(Color.white);
+	circleColors.add(Color.lightGray);
+	
     }
 
 
     public static void main (String[] args)
     {
-
 	JFrame f = new JFrame ("Circle Test");
 	f.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 	f.getContentPane ().add (new CircleTest ());
-	f.setSize (1250, 1000);
+	f.setSize (1230, 755);
 	f.setVisible (true);
     }
 }
@@ -167,29 +147,32 @@ class PhysicsEngine
 
     double lasttime = 0, time = 0;
 
-    public PhysicsEngine()
+    public PhysicsEngine ()
     {
-    this.frictionWithAABB=1;
-    this.BallBallFriction=1;
-    this.timeScale=10;
-    this.dragFriction=1;
+	this.frictionWithAABB = 1;
+	this.BallBallFriction = 1;
+	this.timeScale = 10;
+	this.dragFriction = 1;
     }
-    
-    public PhysicsEngine(double AABBFriction,double BallBallCollisionFriction, double drag)
+
+
+    public PhysicsEngine (double AABBFriction, double BallBallCollisionFriction, double drag)
     {
-    this.frictionWithAABB=AABBFriction;
-    this.BallBallFriction=BallBallCollisionFriction;
-    this.dragFriction=drag;
+	this.frictionWithAABB = AABBFriction;
+	this.BallBallFriction = BallBallCollisionFriction;
+	this.dragFriction = drag;
     }
-    
-    public PhysicsEngine(double AABBFriction,double BallBallCollisionFriction,double drag, double timeFactor)
+
+
+    public PhysicsEngine (double AABBFriction, double BallBallCollisionFriction, double drag, double timeFactor)
     {
-    this.frictionWithAABB=AABBFriction;
-    this.BallBallFriction=1 - 0.01*BallBallCollisionFriction;
-    this.dragFriction=1 - drag*0.0001;
-    this.timeScale=timeFactor;
+	this.frictionWithAABB = AABBFriction;
+	this.BallBallFriction = 1 - 0.01 * BallBallCollisionFriction;
+	this.dragFriction = 1 - drag * 0.0001;
+	this.timeScale = timeFactor;
     }
-    
+
+
     public void addParticle ()
     {
 	Objects.add (new Particle ("##" + objectNum));
@@ -258,6 +241,7 @@ class PhysicsEngine
     {
 	Objects.add (new Circle (label, 1, x, y, vx, vy, ax, ay, radius));
     }
+
 
     public void addCircle (String label, double x, double y, double vx, double vy, double ax, double ay, double mass, double radius)
     {
@@ -347,6 +331,11 @@ class PhysicsEngine
     }
 
 
+    public Vector getAllCircles ()
+    {
+	return Objects;
+    }
+
 
     public double getTimeSinceLast ()
     {
@@ -359,7 +348,6 @@ class PhysicsEngine
 	double timedif = time - lasttime;
 	lasttime = time;
 	return timedif / this.timeScale;
-       
     }
 
 
@@ -376,8 +364,7 @@ class PhysicsEngine
 	    if (Objects.get (i) instanceof Particle)
 	    {
 		Particle current = (Particle) Objects.get (i);
-		current.Update (updateTime,this.dragFriction); //updates the velocity and position of particles
-		
+		current.Update (updateTime, this.dragFriction); //updates the velocity and position of particles
 	    }
 	}
     }
@@ -401,7 +388,7 @@ class PhysicsEngine
 	    a.pos.x = right - a.r;
 	    a.v.x *= (-1); // if it hit the boundary just reverse the movement
 	    //FrictionwithAABB:
-	    a.v.scalarMul(this.frictionWithAABB);
+	    a.v.scalarMul (this.frictionWithAABB);
 	    return;
 	}
 
@@ -413,7 +400,7 @@ class PhysicsEngine
 	    a.pos.x = left + a.r;
 	    a.v.x *= (-1);
 	    //FrictionwithAABB:
-	    a.v.scalarMul(this.frictionWithAABB);
+	    a.v.scalarMul (this.frictionWithAABB);
 	    return;
 	}
     }
@@ -429,25 +416,20 @@ class PhysicsEngine
 	    a.pos.y = (down - a.r);
 	    a.v.y *= (-1);
 	    //FrictionwithAABB:
-	    a.v.scalarMul(this.frictionWithAABB);
+	    a.v.scalarMul (this.frictionWithAABB);
 	    return;
 	}
-
-
 	double up = b.y;
-
 
 	if ((pos + vel) < up + a.r)
 	{
 	    a.pos.y = up + a.r;
 	    a.v.y *= (-1);
-	 //FrictionwithAABB:
-	 a.v.scalarMul(this.frictionWithAABB);
+	    //FrictionwithAABB:
+	    a.v.scalarMul (this.frictionWithAABB);
 	    return;
 	}
     }
-
-
 
 
     public void AABBCollisionResolution ()
@@ -459,7 +441,6 @@ class PhysicsEngine
 		Circle current = (Circle) Objects.get (i);
 		for (int j = 0 ; j < AABBs.size () ; j++)
 		{
-
 		    AABB box = (AABB) AABBs.get (j);
 		    AABBCollisionCheck (current, box);
 		}
@@ -468,13 +449,10 @@ class PhysicsEngine
     } //end of public void AABBCollisionResolution()
 
 
-
-
     private void CircleCircleResolution (Circle circle1, Circle circle2)
     {
 	Vec2D v1 = circle1.v; // Temporary variables for circle's velocities.
 	Vec2D v2 = circle2.v;
-
 	Vec2D n = new Vec2D (circle1.pos.x - circle2.pos.x, circle1.pos.y - circle2.pos.y).Norm (); //Creates a normalized vector along the point of collision.
 
 	double a1 = Vec2D.Dot (n, v1); // Projects the velocites onto the normalized vector from above
@@ -485,42 +463,30 @@ class PhysicsEngine
 	//System.out.println(v1.Display() + "\n" +  v2.Display());
 	Vec2D v1Final = v1.Sub (n.scalMul (optimizedP * circle2.mass)); // calculates the final velocities of the balls.
 	Vec2D v2Final = v2.Add (n.scalMul (optimizedP * circle1.mass));
-	
-	v1Final.scalarMul(this.BallBallFriction);
-	v2Final.scalarMul(this.BallBallFriction);
-	
+
+	v1Final.scalarMul (this.BallBallFriction);
+	v2Final.scalarMul (this.BallBallFriction);
+
 	circle1.v = v1Final;
 	circle2.v = v2Final;
-
-
-	
-
     }
-
-
 
 
     public void ballCollisionResolution ()
     {
-
 	for (int i = 0 ; i < Objects.size () ; i++)
 	{
 	    if (Objects.get (i) instanceof Circle)
 	    {
 		Circle b1 = (Circle) Objects.get (i);
-
 		for (int j = i + 1 ; j < Objects.size () ; j++)
 		{
 		    if (Objects.get (j) instanceof Circle)
 		    {
-
 			Circle b2 = (Circle) Objects.get (j);
-
 			if (Vec2D.magSquared (b2.v) == 0)
 			{
-
 			    if (stationaryCheck (b1, b2))
-
 				CircleCircleResolution (b1, b2);
 			}
 			/*else if (Vec2D.magSquared (b1.v) == 0)
@@ -530,9 +496,7 @@ class PhysicsEngine
 			}*/
 			else
 			{
-
 			    if (movingCheck (b1, b2))
-
 				CircleCircleResolution (b1, b2);
 			}
 		    }
@@ -540,8 +504,6 @@ class PhysicsEngine
 	    }
 	} //end of outer for loop
     } //end of public void AABBCollisionResolution()
-
-
 
 
     private boolean stationaryCheck (Circle a1, Circle a2)
@@ -572,8 +534,6 @@ class PhysicsEngine
 	if (Math.sqrt (F) > sumr)
 	    return false;         // the closest the balls can get is less bigger than the sum of raddi, they never hit
 
-
-
 	//sqrt(T) is distance between the projection of C onto move vector and the distance the ball can travel
 
 	// sumr^2 = T + F
@@ -585,56 +545,35 @@ class PhysicsEngine
 
 	//the distance that tbe ball can travel is called Distance.
 	double Distance = D.Mag () - Math.sqrt (T);
-
 	if (a1.v.Mag () < Distance)
 	    return false;
-
 	a1.pos = Vec2D.Add (a1.v.Norm ().scalMul (Distance), a1.pos);
-
-
-
 	return true;
     } //end of stationaryCheck
 
 
-
     private boolean movingCheck (Circle a1, Circle a2)
     {
-
-
-
 	Vec2D rv = Vec2D.Sub (a1.v, a2.v);  //velocity of b1 relative to b2
-
-
 	//create a vector from center of a1 to center of a2 called C
 	Vec2D C = new Vec2D (a2.pos.x - a1.pos.x, a2.pos.y - a1.pos.y);
-
 	double d1 = C.Mag (); //d1 is the distance between centers.
 	double sumr = a1.r + a2.r;
 	double d2 = d1 - sumr; //d2  is the distance between the circle edges
-
 	if (a1.v.Mag () < d2)
 	    return false;                   //they cant reach
-
 	if (Vec2D.Dot (rv, C) < 0)
 	    return false;                          //opposite directions
-
-
 	Vec2D D = Vec2D.Project (C, rv); //projection of position vector onto velocity vector
-
 	// sqrt(F) is the closest distance the centers can get.
-
 	// D.Mag()^2 + F = C.Mag()^2
 	// F = C.Mag()^2 - D.Mag()^2
-
 	double F = (C.Mag () * C.Mag ()) - (D.Mag () * D.Mag ());
 
 	if (Math.sqrt (F) > sumr)
 	    return false;         // the closest the balls can get is less bigger than the sum of raddi, they never hit
 
-
 	//sqrt(T) is distance between the projection of C onto move vector and the distance the ball can travel
-
 	// sumr^2 = T + F
 	// T= sumr^2 - F
 	double T = (sumr * sumr) - F;
@@ -647,8 +586,6 @@ class PhysicsEngine
 
 	if (rv.Mag () < Distance)
 	    return false;
-
-
 	double ratio = Distance / rv.Mag (); //the time ratio.
 
 	//making the balls touch.
@@ -658,27 +595,19 @@ class PhysicsEngine
 	a2.pos = Vec2D.Add (a2.v.scalMul (ratio), a2.pos);
 	// updateCircle (a1);
 	// updateCircle (a2);
-	
 	return true;
     } //end of movingCheck
-
-
-
-
-
 } //end of class PhysicsEngine
 
 
 class Vec2D
 {
-
     public double x, y;
     public Vec2D ()
     {
 	x = 0;
 	y = 0;
     }
-
 
 
     public Vec2D (double i, double j)
@@ -697,23 +626,18 @@ class Vec2D
 
     public static Vec2D Add (Vec2D A, Vec2D B)
     {
-
 	return new Vec2D (A.x + B.x, A.y + B.y);
     }
 
 
-
     public static Vec2D Sub (Vec2D A, Vec2D B)
     {
-
 	return new Vec2D (A.x - B.x, A.y - B.y);
-
     }
 
 
     public Vec2D Sub (Vec2D A)
     {
-
 	return new Vec2D (x - A.x, y - A.y);
     }
 
@@ -722,7 +646,6 @@ class Vec2D
     {
 	x = 0;
 	y = 0;
-
     }
 
 
@@ -782,12 +705,12 @@ class Vec2D
     {
 	return new Vec2D (x * A, y * A);
     }
-    
+
+
     public void scalarMul (double A)
     {
-	this.x=x*A;
-	this.y=y*A;
-	
+	this.x = x * A;
+	this.y = y * A;
     }
 
 
@@ -810,7 +733,6 @@ class Particle
     public Vec2D v;
     double mass;
     public String name;
-
 
     public Particle ()
     {
@@ -856,21 +778,16 @@ class Particle
     {
 	// System.out.println(Vec2D.Add (v, a.scalMul (time)).Display() + " " + Vec2D.Add (pos, v.scalMul (time)).Display());
 	v = Vec2D.Add (v, a.scalMul (time));
-       
 	pos = Vec2D.Add (pos, v.scalMul (time));
-     
-
     }
-    
+
+
     public void Update (double time, double dragFactor)  //used for updating the particle movement
     {
 	// System.out.println(Vec2D.Add (v, a.scalMul (time)).Display() + " " + Vec2D.Add (pos, v.scalMul (time)).Display());
 	v = Vec2D.Add (v, a.scalMul (time));
-	//
-	v= v.Norm().scalMul(v.Mag()* dragFactor);
+	v = v.Norm ().scalMul (v.Mag () * dragFactor);
 	pos = Vec2D.Add (pos, v.scalMul (time));
-     
-
     }
 
 
@@ -883,7 +800,6 @@ class Particle
 
     public void addA (double i, double j)
     {
-
 	Vec2D B = new Vec2D (i, j);
 	a = Vec2D.Add (a, B);
     }
@@ -891,7 +807,6 @@ class Particle
 
     public void addV (double i, double j)
     {
-
 	Vec2D B = new Vec2D (i, j);
 	v = Vec2D.Add (v, B);
     }
@@ -910,8 +825,6 @@ class Particle
 	v.y = j;
     }
 } //end of class particle
-
-
 
 
 class Circle extends Particle
